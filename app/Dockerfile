@@ -2,6 +2,16 @@ FROM ubuntu:jammy
 
 COPY requirements.txt requirements.txt
 
+# 使用中国的ubuntu软件源
+RUN sed -i 's|http://.*security.ubuntu.com|http://repo.huaweicloud.com|g' /etc/apt/sources.list ; \
+    sed -i 's|http://.*archive.ubuntu.com|http://repo.huaweicloud.com|g' /etc/apt/sources.list ; \
+    sed -i 's|http://ports.ubuntu.com|http://repo.huaweicloud.com|g' /etc/apt/sources.list
+
+RUN echo '\
+[global]                                          \n\
+trusted-host = mirrors.huaweicloud.com                 \n\
+index-url = https://mirrors.huaweicloud.com/repository/pypi/simple  ' > /etc/pip.conf
+
 RUN apt-get	update && \
 	apt-get install -y --no-install-recommends apt-utils python3 python3-pip sqlite3 fftw3 python3-setuptools && \
 	apt-get install -y --no-install-recommends python3-dev libfftw3-dev git && \
